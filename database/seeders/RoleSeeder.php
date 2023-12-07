@@ -16,19 +16,27 @@ class RoleSeeder extends Seeder
         //
 
         DB::table('roles')->insert([
-            'name' => 'user-administrator',
-            'description' => 'Administrator',
+            'name' => 'UserAdmin',
+            'description' => 'User Administrator',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         DB::table('roles')->insert([
-            'name' => 'moderator',
+            'name' => 'Moderator',
             'description' => 'Moderator',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
 
         DB::table('roles')->insert([
-            'name' => 'theme_manager',
-            'description' => 'Theme Manager',
+            'name' => 'ThemeAdmin',
+            'description' => 'Theme Administrator',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
+
+
     }
 }
