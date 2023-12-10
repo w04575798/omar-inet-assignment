@@ -30,14 +30,9 @@
                                 <tr>
                                     <td>{{ $user->name }}</td>
                                     <td>
-                                        <!-- No link for 'Show' action for now -->
+                                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary">Edit</a>
                                     </td>
-                                    <td>
-                                        <!-- No link for 'Edit' action for now -->
-                                    </td>
-                                    <td>
-                                        <!-- No link for 'Delete' action for now -->
-                                    </td>
+
                                 </tr>
                             @endforeach
                             </tbody>

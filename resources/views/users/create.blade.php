@@ -14,7 +14,7 @@
                             </div>
                         @endif
 
-                        {{-- Add form here --}}
+
                         <form method="post" action="{{ route('users.store') }}">
                             @csrf
                             <div class="mb-3">

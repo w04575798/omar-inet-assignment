@@ -54,4 +54,53 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('status', 'User created successfully');
     }
 
+    public function edit(User $user)
+    {
+        // Fetch the user roles
+        $roles = Role::all();
+
+        // Return the edit view with user and roles
+        return view('users.edit', compact('user', 'roles'));
+    }
+
+    /**
+     *
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, User $user)
+    {
+        $request->validate([
+            'name' => 'required|unique:users,name,' . $user->id . '|max:255',
+            'role' => 'required|exists:roles,id',
+        ]);
+
+        // Update user information
+        $user->update([
+            'name' => $request->name,
+        ]);
+
+        // Sync roles
+        $user->roles()->sync([$request->role]);
+
+        return redirect()->route('users.index')->with('status', 'User updated successfully');
+    }
+
+    public function show(User $user)
+    {
+        return view('users.show', compact('user'));
+    }
+
+    public function destroy(User $user)
+    {
+        // Soft delete the user
+        $user->delete();
+
+        return redirect()->route('users.index')->with('status', 'User deleted successfully');
+    }
+
+
+
 }
