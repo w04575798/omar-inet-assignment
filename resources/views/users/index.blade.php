@@ -14,6 +14,10 @@
                             </div>
                         @endif
 
+                        <div class="mb-3">
+                            <a class="btn btn-primary" href="{{ route('users.create') }}">Create New Admin User</a>
+                        </div>
+
                         <table class="table">
                             <thead>
                             <tr>
