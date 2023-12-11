@@ -7,62 +7,67 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 
 class UsersTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        // Insert sample data
-        DB::table('users')->insert([
-            'name' => 'Jane',
-            'email' => 'jane@example.com',
-            'email_verified_at' => now(),
-            'password' => bcrypt('password'),
-            'remember_token' => Str::random(60),
-            'created_at' => now(),
-            'updated_at' => now(),
-            'deleted_at' => now(),
-        ]);
+        $timestamp = now();
 
-        DB::table('users')->insert([
-            'name' => 'Bob',
-            'email' => 'bob@example.com',
-            'email_verified_at' => now(),
-            'password' => bcrypt('password1'),
-            'remember_token' => Str::random(60),
-            'created_at' => now(),
-            'updated_at' => now(),
-            'deleted_at' => now(),
-        ]);
+        // Clear existing records to avoid ID conflicts
+        User::whereIn('email', ['jane@example.com', 'bob@example.com', 'susan@example.com'])->delete();
 
-        DB::table('users')->insert([
-            'name' => 'Susan',
-            'email' => 'susan@example.com',
-            'email_verified_at' => now(),
-            'password' => bcrypt('password1'),
-            'remember_token' => Str::random(60),
-            'created_at' => now(),
-            'updated_at' => now(),
-            'deleted_at' => now(),
-        ]);
+        // Insert sample data for Jane
+        $jane = User::firstOrCreate(
+            ['email' => 'jane@example.com'],
+            [
+                'name' => 'Jane',
+                'email_verified_at' => $timestamp,
+                'password' => bcrypt('password'),
+                'remember_token' => Str::random(60),
+                'created_at' => $timestamp,
+                'updated_at' => $timestamp,
+                // 'deleted_at' => now(), // You can exclude this line for initially active users
+            ]
+        );
+
+        // Insert sample data for Bob
+        $bob = User::firstOrCreate(
+            ['email' => 'bob@example.com'],
+            [
+                'name' => 'Bob',
+                'email_verified_at' => $timestamp,
+                'password' => bcrypt('password1'),
+                'remember_token' => Str::random(60),
+                'created_at' => $timestamp,
+                'updated_at' => $timestamp,
+                // 'deleted_at' => now(), // You can exclude this line for initially active users
+            ]
+        );
+
+        // Insert sample data for Susan
+        $susan = User::firstOrCreate(
+            ['email' => 'susan@example.com'],
+            [
+                'name' => 'Susan',
+                'email_verified_at' => $timestamp,
+                'password' => bcrypt('password1'),
+                'remember_token' => Str::random(60),
+                'created_at' => $timestamp,
+                'updated_at' => $timestamp,
+                // 'deleted_at' => now(), // You can exclude this line for initially active users
+            ]
+        );
 
         // Create roles
         $userAdmin = Role::create(['name' => 'UserAdmin', 'description' => 'User Administrator']);
-        $moderator = Role::create(['name' => 'Moderator', 'description' => 'Moderator']);
-        $themeAdmin = Role::create(['name' => 'ThemeAdmin', 'description' => 'Theme Administrator']);
 
         // Assign roles to users
-        $jane = User::where('email', 'jane@example.com')->first();
-        $bob = User::where('email', 'bob@example.com')->first();
-        $susan = User::where('email', 'susan@example.com')->first();
-
-        $jane->roles()->attach($userAdmin);
-        $bob->roles()->attach($moderator);
-        $susan->roles()->attach($themeAdmin);
+        $jane->roles()->sync([$userAdmin->id]);
+        $bob->roles()->sync([$userAdmin->id]);
+        $susan->roles()->sync([$userAdmin->id]);
     }
 }

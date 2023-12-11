@@ -32,7 +32,16 @@
                                     <td>
                                         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary">Edit</a>
                                     </td>
-
+                                    <td>
+                                        <a href="{{ route('users.show', $user->id) }}" class="btn btn-primary">Show</a>
+                                    </td>
+                                    <td>
+                                        <form method="post" action="{{ route('users.destroy', $user->id) }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-danger" type="submit">Delete</button>
+                                        </form>
+                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>
