@@ -19,14 +19,18 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/user-admin', [App\Http\Controllers\UserController::class, 'index'])->name('user-admin.index');
-Route::get('/user-admin/create', [App\Http\Controllers\UserController::class, 'create'])->name('users.create');
-Route::post('/user-admin', [App\Http\Controllers\UserController::class, 'store'])->name('users.store');
-Route::get('/user-admin', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
-Route::get('/user-admin/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
-Route::put('/user-admin/{user}', [UserController::class, 'update'])->name('users.update');
-Route::get('/user-admin/{user}', [UserController::class, 'show'])->name('users.show');
-Route::delete('/user-admin/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-Route::resource('posts', PostController::class)->except(['show']);
+Route::middleware(['check.is.admin'])->group(function () {
+    // Admin routes using UserController within the 'user-admin' group
+    Route::prefix('user-admin')->group(function () {
+        Route::get('/', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+        Route::get('/create', [App\Http\Controllers\UserController::class, 'create'])->name('users.create');
+        Route::post('/', [App\Http\Controllers\UserController::class, 'store'])->name('users.store');
+        Route::get('/{user}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
+        Route::put('/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
+        Route::get('/{user}', [App\Http\Controllers\UserController::class, 'show'])->name('users.show');
+        Route::delete('/{user}', [App\Http\Controllers\UserController::class, 'destroy'])->name('users.destroy');
+    });
+});
+
+Route::resource('/posts', PostController::class)->except(['show']);

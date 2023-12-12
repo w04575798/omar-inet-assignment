@@ -23,15 +23,9 @@
                             <p>{{ $post->content }}</p>
 
                             @auth
-                                @if (Auth::id() === $post->user->id)
+                                @if (Auth::id() === $post->user->id || Auth::user()->roles->contains(2))
                                     <a href="{{ route('posts.edit', $post) }}" class="btn btn-sm btn-primary">Edit</a>
 
-                                    <form action="{{ route('posts.destroy', $post) }}" method="post" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                    </form>
-                                @elseif (Auth::user()->hasRole('Moderator'))
                                     <form action="{{ route('posts.destroy', $post) }}" method="post" class="d-inline">
                                         @csrf
                                         @method('DELETE')
