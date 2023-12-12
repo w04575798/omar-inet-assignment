@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\PostController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,4 +29,4 @@ Route::get('/user-admin/{user}/edit', [UserController::class, 'edit'])->name('us
 Route::put('/user-admin/{user}', [UserController::class, 'update'])->name('users.update');
 Route::get('/user-admin/{user}', [UserController::class, 'show'])->name('users.show');
 Route::delete('/user-admin/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-
+Route::resource('posts', PostController::class)->except(['show']);

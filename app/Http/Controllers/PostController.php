@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class PostController extends Controller
 {
@@ -12,7 +14,14 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::with('user')->latest()->get();
+
+        if ($posts->isEmpty()) {
+            // No posts found
+            return view('posts.index', ['posts' => []]);
+        }
+
+        return view('posts.index', compact('posts'));
     }
 
     /**
@@ -20,7 +29,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        // You can add logic here if needed
+        return view('posts.create');
     }
 
     /**
@@ -28,8 +38,23 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'content' => 'required|string|max:255',
+        ]);
+
+        // Create a new post
+        Post::create([
+            'content' => $request->input('content'),
+            'created_by' => auth()->user()->id,
+        ]);
+
+        // Redirect to the index page with a success message
+        return redirect()->route('posts.index')->with('success', 'Post created successfully.');
+
     }
+
+    // Other methods (show, edit, update, destroy) can be implemented as needed
+
 
     /**
      * Display the specified resource.
@@ -62,4 +87,15 @@ class PostController extends Controller
     {
         //
     }
+
+    private function canUpdatePost(Post $post): bool
+    {
+        return Auth::check() && ($post->user && $post->user->id === Auth::id() || (Auth::user() && Auth::user()->hasRole('moderator')));
+    }
+
+    private function canDeletePost(Post $post): bool
+    {
+        return Auth::check() && ($post->user && $post->user->id === Auth::id() || (Auth::user() && Auth::user()->hasRole('moderator')));
+    }
+
 }
