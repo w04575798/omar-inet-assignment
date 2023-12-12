@@ -52,6 +52,8 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
+
+
     public function hasRole($roleId)
     {
         return $this->roles->contains('id', $roleId);
