@@ -8,6 +8,12 @@
             <a href="{{ route('posts.create') }}" class="btn btn-primary mb-3">Create New Post</a>
         @endauth
 
+        @if(session('status'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('status') }}
+            </div>
+        @endif
+
         <div class="card">
             <div class="card-header">{{ __('Main Public Feed') }}</div>
 
