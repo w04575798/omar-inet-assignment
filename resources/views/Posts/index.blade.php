@@ -31,14 +31,19 @@
                             @auth
                                 @if (Auth::id() === $post->user->id)
                                     <a href="{{ route('posts.edit', $post) }}" class="btn btn-sm btn-primary">Edit</a>
-                                @endif
-
-                                @if (Auth::user()->roles->contains(2))
                                     <form action="{{ route('posts.destroy', $post) }}" method="post" class="d-inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                     </form>
+                                @else
+                                    @if (Auth::user()->roles->contains(2))
+                                        <form action="{{ route('posts.destroy', $post) }}" method="post" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
+                                    @endif
                                 @endif
                             @endauth
                         </div>

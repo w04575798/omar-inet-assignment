@@ -28,14 +28,10 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto">
-                    <!-- ... (your existing left side navbar items) ... -->
                 </ul>
 
-                <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
-                    <!-- Authentication Links -->
                     @guest
                         @if (Route::has('login'))
                             <li class="nav-item">
@@ -57,7 +53,7 @@
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                                         document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
                                 </a>
 
@@ -67,7 +63,6 @@
                             </div>
                         </li>
 
-                        <!-- Add the following button for User Admin page -->
                         @if (Auth::user()->hasRole(1))
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('users.index') }}">User Admin</a>
@@ -78,6 +73,13 @@
             </div>
         </div>
     </nav>
+
+    <!-- Display flash messages -->
+    @if(session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
 
     <main class="py-4">
         @yield('content')
