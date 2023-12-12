@@ -69,7 +69,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('posts.edit', compact('post'));
+
     }
 
     /**
@@ -77,7 +78,16 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $request->validate([
+            'content' => 'required|string|max:255',
+        ]);
+
+        // Update the post
+        $post->update([
+            'content' => $request->input('content'),
+        ]);
+        return redirect()->route('posts.index')->with('success', 'Post updated successfully.');
+
     }
 
     /**
@@ -85,17 +95,12 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+
+        $post->delete();
+
+        return redirect()->route('posts.index')->with('success', 'Post deleted successfully.');
     }
 
-    private function canUpdatePost(Post $post): bool
-    {
-        return Auth::check() && ($post->user && $post->user->id === Auth::id() || (Auth::user() && Auth::user()->hasRole('moderator')));
-    }
 
-    private function canDeletePost(Post $post): bool
-    {
-        return Auth::check() && ($post->user && $post->user->id === Auth::id() || (Auth::user() && Auth::user()->hasRole('moderator')));
-    }
 
 }
