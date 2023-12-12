@@ -14,6 +14,7 @@
             </div>
         @endif
 
+
         <div class="card">
             <div class="card-header">{{ __('Main Public Feed') }}</div>
 
